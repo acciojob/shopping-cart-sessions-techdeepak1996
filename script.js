@@ -1,5 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
 // Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
@@ -11,6 +9,8 @@ const products = [
 
 // DOM elements
 const productList = document.getElementById("product-list");
+const cartList = document.getElementById("cart-list");
+const clearCartBtn = document.getElementById("clear-cart-btn");
 
 // Render product list
 function renderProducts() {
@@ -49,13 +49,16 @@ function addToCart(productId) {
   }
 }
 
-
 // Remove item from cart
 function removeFromCart(productId) {
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  const productIndex = cart.findIndex((item) => item.id === productId);
-  if (productIndex !== -1) {
-    cart.splice(productIndex, 1);
+  const existingProduct = cart.find((item) => item.id === productId);
+  if (existingProduct) {
+    existingProduct.quantity -= 1;
+    if (existingProduct.quantity === 0) {
+      const productIndex = cart.findIndex((item) => item.id === productId);
+      cart.splice(productIndex, 1);
+    }
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
@@ -66,6 +69,17 @@ function clearCart() {
   sessionStorage.removeItem("cart");
   renderCart();
 }
+
+// Event listener for add to cart buttons
+productList.addEventListener("click", (event) => {
+  if (event.target.classList.contains("add-to-cart-btn")) {
+    const productId = parseInt(event.target.getAttribute("data-id"));
+    addToCart(productId);
+  }
+});
+
+// Event listener for clear cart button
+clearCartBtn.addEventListener("click", clearCart);
 
 // Initial render
 renderProducts();
