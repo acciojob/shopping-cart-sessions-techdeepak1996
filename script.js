@@ -33,14 +33,14 @@ function renderCart() {
 }
 
 // Function to add item to cart
-function addToCart(productId) {
-  const product = products.find((item) => item.id === productId);
-  if (product) {
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    cart.push(product);
-    sessionStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-  }
+function renderCart() {
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cartList.innerHTML = "";
+  cart.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+    cartList.appendChild(li);
+  });
 }
 
 // Function to clear cart
