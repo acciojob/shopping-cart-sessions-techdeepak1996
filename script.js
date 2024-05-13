@@ -32,18 +32,14 @@ function renderCart() {
   });
 }
 
-// Add item to cart
 function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    const existingProduct = cart.find((item) => item.id === product.id);
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      product.quantity = 1;
-      cart.push(product);
-    }
+    // Always add a new item to the cart
+    const newProduct = { ...product }; // Create a new object with the same properties as the product
+    newProduct.quantity = 1;
+    cart.push(newProduct);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
