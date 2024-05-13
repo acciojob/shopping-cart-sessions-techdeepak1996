@@ -36,14 +36,21 @@ function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    // Always add a new item to the cart
-    const newProduct = { ...product }; // Create a new object with the same properties as the product
-    newProduct.quantity = 1;
-    cart.push(newProduct);
+    // Check if the product already exists in the cart
+    const existingProduct = cart.find((item) => item.id === productId);
+    if (existingProduct) {
+      // If the product already exists, increment its quantity
+      existingProduct.quantity += 1;
+    } else {
+      // If the product is not in the cart, add it with quantity 1
+      const newProduct = { ...product, quantity: 1 }; // Create a new object with the same properties as the product
+      cart.push(newProduct);
+    }
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
 }
+
 
 // Remove item from cart
 function removeFromCart(productId) {
