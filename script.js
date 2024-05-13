@@ -47,7 +47,7 @@ function addToCart(productId) {
   }
 }
 
-// Clear cart
+// Clear cartz
 function clearCart() {
   sessionStorage.removeItem("cart");
   renderCart();
