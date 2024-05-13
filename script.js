@@ -32,18 +32,16 @@ function renderCart() {
   });
 }
 
+// Add item to cart
 function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    const existingProduct = cart.find((item) => item.id === productId);
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      // Create a new copy of the product object and add a quantity property
-      const newProduct = { ...product, quantity: 1 };
-      cart.push(newProduct);
-    }
+    // Create a new copy of the product object
+    const newProduct = { ...product }; 
+    delete newProduct.quantity; // Ensure quantity property does not exist
+    // Always add a new item to the cart
+    cart.push(newProduct);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
