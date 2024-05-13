@@ -38,7 +38,6 @@ function addToCart(productId) {
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
     // Always add a new item to the cart
-    product.quantity = 1;
     cart.push(product);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
