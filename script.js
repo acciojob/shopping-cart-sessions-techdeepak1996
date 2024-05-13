@@ -52,12 +52,9 @@ function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    const existingProductIndex = cart.findIndex((item) => item.id === productId);
-    if (existingProductIndex !== -1) {
-      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
+    // Always add a new item to the cart
+    const newProduct = { ...product, quantity: 1 }; // Create a new object with the same properties as the product
+    cart.push(newProduct);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
