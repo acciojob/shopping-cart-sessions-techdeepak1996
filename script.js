@@ -1,11 +1,9 @@
 // Product data
-const products = [
-  { id: 1, name: "Product 1", price: 10 },
-  { id: 2, name: "Product 2", price: 20 },
-  { id: 3, name: "Product 3", price: 30 },
-  { id: 4, name: "Product 4", price: 40 },
-  { id: 5, name: "Product 5", price: 50 },
-];
+() => {
+  cy.get("ul#product-list").children("li").first().children("button").click();
+  cy.window().its("sessionStorage").should("have.length", 1);
+  cy.window().its("sessionStorage").invoke("getItem", "cart").should("eq", JSON.stringify([{ id: 1, name: "Product 1", price: 10, quantity: 2 }, { id: 5, name: "Product 5", price: 50, quantity: 1 }]));
+}
 
 // DOM elements
 const productList = document.getElementById("product-list");
