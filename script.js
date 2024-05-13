@@ -1,17 +1,3 @@
-cy.get("ul#product-list").children("li").first().children("button").click();
-cy.window().its("sessionStorage").invoke("getItem", "cart").then((cart) => {
-  const actualCart = JSON.parse(cart);
-  const expectedCart = [
-    { id: 1, name: "Product 1", price: 10 },
-    { id: 5, name: "Product 5", price: 50 },
-    { id: 1, name: "Product 1", price: 10, quantity: 1 }
-  ];
-  // Sort both arrays before comparing
-  const sortedActualCart = actualCart.sort((a, b) => a.id - b.id);
-  const sortedExpectedCart = expectedCart.sort((a, b) => a.id - b.id);
-  expect(sortedActualCart).to.deep.equal(sortedExpectedCart);
-});
-
 // Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
@@ -41,7 +27,7 @@ function renderCart() {
   cartList.innerHTML = "";
   cart.forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+    li.textContent = `${item.name} - $${item.price} x ${item.quantity || 1}`;
     cartList.appendChild(li);
   });
 }
@@ -98,4 +84,3 @@ clearCartBtn.addEventListener("click", clearCart);
 // Initial render
 renderProducts();
 renderCart();
-
