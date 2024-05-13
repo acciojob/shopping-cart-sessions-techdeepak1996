@@ -47,12 +47,18 @@ function renderCart() {
   }
 }
 
-// Add item to cart
 function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
-    let cart = JSON.parse(sessionStorage.getItem("cart"));
-    cart.push({ ...product, quantity: 1 });
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || []; // Initialize cart if null
+    const existingProductIndex = cart.findIndex((item) => item.id === productId);
+    if (existingProductIndex !== -1) {
+      // If product already exists in cart, increase its quantity
+      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
+    } else {
+      // If product is not in cart, add it with quantity 1
+      cart.push({ ...product, quantity: 1 });
+    }
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
