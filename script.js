@@ -94,3 +94,36 @@ clearCartBtn.addEventListener("click", clearCart);
 // Initial render
 renderProducts();
 renderCart();
+
+it("should display product list and shopping cart", () => {
+  cy.visit(baseUrl + "/main.html");
+  cy.get("h1").contains("Products");
+  cy.get("ul#product-list").children("li").should("have.length", 5);
+  cy.get("h2").contains("Shopping Cart");
+  cy.get("ul#cart-list").should("be.empty");
+  cy.get("button#clear-cart-btn").contains("Clear Cart");
+});
+
+it("should add items to cart", () => {
+  cy.visit(baseUrl + "/main.html");
+  cy.get("ul#product-list").children("li").first().children("button").click();
+  cy.get("ul#cart-list").children("li").should("have.length", 1);
+  cy.get("ul#product-list").children("li").last().children("button").click();
+  cy.get("ul#cart-list").children("li").should("have.length", 2);
+});
+
+it("should persist cart items in sessionStorage", () => {
+  cy.get("ul#product-list").children("li").first().children("button").click();
+  cy.window().its("sessionStorage").should("have.length", 1);
+  cy.window().its("sessionStorage").invoke("getItem", "cart").then((cart) => {
+    const cartArray = JSON.parse(cart);
+    const expectedCart = [
+      { id: 1, name: "Product 1", price: 10, quantity: 1 },
+      { id: 5, name: "Product 5", price: 50, quantity: 1 }
+    ];
+    // Sort both arrays before comparing
+    const sortedActualCart = cartArray.sort((a, b) => a.id - b.id);
+    const sortedExpectedCart = expectedCart.sort((a, b) => a.id - b.id);
+    expect(sortedActualCart).to.deep.equal(sortedExpectedCart);
+  });
+});
