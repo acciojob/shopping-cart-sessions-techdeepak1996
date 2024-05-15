@@ -12,14 +12,16 @@ const productList = document.getElementById("product-list");
 const cartList = document.getElementById("cart-list");
 const clearCartBtn = document.getElementById("clear-cart-btn");
 
+
 // Render product list
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
-    li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
+    li.innerHTML = ${product.name} - ${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>;
     productList.appendChild(li);
   });
 }
+
 
 // Render cart list
 function renderCart() {
@@ -27,23 +29,18 @@ function renderCart() {
   cartList.innerHTML = "";
   cart.forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+    li.textContent = ${item.name} - $${item.price} x ${item.quantity};
     cartList.appendChild(li);
   });
 }
+
 
 function addToCart(productId) {
   const product = products.find((item) => item.id === productId);
   if (product) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-    const existingProduct = cart.find((item) => item.id === productId);
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      // Create a new copy of the product object and add a quantity property
-      const newProduct = { ...product, quantity: 1 };
-      cart.push(newProduct);
-    }
+    const newProduct = { ...product };
+    cart.push(newProduct);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
@@ -55,6 +52,7 @@ function clearCart() {
   renderCart();
 }
 
+
 // Event listener for add to cart buttons
 productList.addEventListener("click", (event) => {
   if (event.target.classList.contains("add-to-cart-btn")) {
@@ -63,8 +61,10 @@ productList.addEventListener("click", (event) => {
   }
 });
 
+
 // Event listener for clear cart button
 clearCartBtn.addEventListener("click", clearCart);
+
 
 // Initial render
 renderProducts();
